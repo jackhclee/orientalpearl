@@ -4,6 +4,7 @@ const { Client } = require('pg');
 const app = express();
 
 app.get('/', async (req, res) => {
+            //process.env.DATABASE_URL
   console.log(process.env.DATABASE_URL);
   await client.connect();
   const result = await client.query('SELECT id, title from books')
@@ -15,9 +16,7 @@ app.get('/', async (req, res) => {
 
 const client = new Client({
   connectingString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
+  ssl: true,
 })
 
 app.listen(process.env.PORT || 3000, () => {

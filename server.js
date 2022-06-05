@@ -9,7 +9,7 @@ app.get('/', async (req, res) => {
   await client.connect();
   const result = await client.query('SELECT id, title from books')
   console.log(result.rows[0].id, result.rows[0].title) // Hello world!
-  res.send(results.rows);
+  res.send(result.rows);
 }
 
 )

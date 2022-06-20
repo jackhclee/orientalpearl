@@ -16,7 +16,7 @@ app.get(`/${booksAPIPrefix}`, async (req, res) => {
 app.post(`/${booksAPIPrefix}`, async (req, res) => {
   let newTitle = req.body.title;
   try {
-    const result = await client.query("INSERT INTO books (title) values ($1) returning id",[req.params.title]);
+    const result = await client.query("INSERT INTO books (title) values ($1) returning id",[newTitle]);
     return res.status(200).send({id: result.rows[0].id})
   } catch (err) {
     return res.status(400).send({err: 'Cannot insert data'});

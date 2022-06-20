@@ -11,7 +11,7 @@ app.get(`/${booksAPIPrefix}`, async (req, res) => {
   queryTitle = queryTitle !== "%" ? "%" + queryTitle + "%" : "%";
   console.log(`queryTitle ${queryTitle}`);
   const result = await client.query('SELECT id, title from books where title like $1',[queryTitle])
-  if (result.rows) { 
+  if (result.rows.length > 0) { 
   console.log(result.rows[0].id, result.rows[0].title)
     res.send([...result.rows, new Date()]);
   } else {

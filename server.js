@@ -7,7 +7,8 @@ app.use(express.json());
 const booksAPIPrefix = "books";
 
 app.get(`/${booksAPIPrefix}`, async (req, res) => {
-  const result = await client.query('SELECT id, title from books')
+  let queryTitle = "%" || req.query.title;
+  const result = await client.query('SELECT id, title from books where title like $1',[queryTitle])
   console.log(result.rows[0].id, result.rows[0].title) // Hello world!
   res.send([...result.rows, new Date()]);
 }

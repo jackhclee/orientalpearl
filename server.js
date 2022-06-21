@@ -6,13 +6,29 @@ app.use(express.json());
 
 const booksAPIPrefix = "books";
 
+const customerAPIPrefix = "customers";
+
 app.get(`/${booksAPIPrefix}`, async (req, res) => {
   let queryTitle = req.query.title || "%";
   queryTitle = queryTitle !== "%" ? "%" + queryTitle + "%" : "%";
   console.log(`queryTitle ${queryTitle}`);
   const result = await client.query('SELECT id, title from books where title like $1',[queryTitle])
   if (result.rows.length > 0) { 
-  console.log(result.rows[0].id, result.rows[0].title)
+    console.log(result.rows[0].id, result.rows[0].title)
+    res.send([...result.rows, new Date()]);
+  } else {
+    res.send([...[], new Date()]);
+  }
+}
+)
+
+app.get(`/${customersAPIPrefix}`, async (req, res) => {
+  let queryName = req.query.name || "%";
+  queryName = queryName !== "%" ? "%" + queryName + "%" : "%";
+  console.log(`queryName ${queryName}`);
+  const result = await client.query('SELECT * from customers where name like $1',[queryName])
+  if (result.rows.length > 0) { 
+    console.log(result.rows[0].id, result.rows[0].title)
     res.send([...result.rows, new Date()]);
   } else {
     res.send([...[], new Date()]);
@@ -41,7 +57,6 @@ const client = new Client({
 let port = process.env.PORT || 3000;
 
 app.listen(port, async () => {
-
   console.log(`Express server started and listening at ${port}`);
   await client.connect();
 }

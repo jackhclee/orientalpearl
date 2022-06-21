@@ -6,7 +6,7 @@ app.use(express.json());
 
 const booksAPIPrefix = "books";
 
-const customerAPIPrefix = "customers";
+const customersAPIPrefix = "customers";
 
 app.get(`/${booksAPIPrefix}`, async (req, res) => {
   let queryTitle = req.query.title || "%";

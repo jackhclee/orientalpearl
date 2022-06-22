@@ -14,7 +14,7 @@ app.get(`/${booksAPIPrefix}`, async (req, res) => {
   console.log(`queryTitle ${queryTitle}`);
   const result = await pool.query('SELECT id, title from books where title like $1',[queryTitle])
   if (result.rows.length > 0) { 
-    console.log(result.rows[0].id, result.rows[0].title)
+    result.rows.forEach( row => console.debug(row.id, row.title))
     res.send([...result.rows, new Date()]);
   } else {
     res.send([...[], new Date()]);
@@ -26,9 +26,9 @@ app.get(`/${customersAPIPrefix}`, async (req, res) => {
   let queryName = req.query.name || "%";
   queryName = queryName !== "%" ? "%" + queryName + "%" : "%";
   console.log(`queryName ${queryName}`);
-  const result = await pool.query('SELECT * from customers where name like $1',[queryName])
-  if (result.rows.length > 0) { 
-    console.log(result.rows[0].id, result.rows[0].title)
+  const result = await pool.query('SELECT * FROM customers WHERE name LIKE $1',[queryName])
+  if (result.rows.length > 0) {
+    result.rows.forEach( row => console.debug(row.id, row.title))
     res.send([...result.rows, new Date()]);
   } else {
     res.send([...[], new Date()]);

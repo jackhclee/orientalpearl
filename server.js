@@ -12,7 +12,7 @@ config = {
     secret: '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'
   },
   auth: {
-    tokenHost: 'https://accounts.google.com/o/oauth2/auth'
+    tokenHost: 'https://accounts.google.com/o/oauth2/auth/v2/auth'
   }
 };
 

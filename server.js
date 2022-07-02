@@ -64,6 +64,7 @@ app.get(`/protected/${booksAPIPrefix}`, async (req, res) => {
   let bearerToken = req.headers.authorization.split(' ')[1]
   console.log(bearerToken);
   let payload = jwt.decode(bearerToken);
+  console.log(`payload.expire at ${moment.unix(payload.exp).utc()}`)
   if ( moment().unix() > payload.exp) {
     res.status(400).send({msg: 'expired'});
   } else {

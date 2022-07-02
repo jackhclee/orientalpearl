@@ -2,6 +2,8 @@ const express = require('express');
 const { Pool } = require('pg');
 const cors = require('cors')
 const { ClientCredentials, AuthorizationCode } = require('simple-oauth2');
+const moment = require('moment');
+const jwt = require('jsonwebtoken');
 const app = express();
 app.use(express.json());
 app.use(cors())
@@ -59,9 +61,26 @@ app.get(`/${callbackAPIPrefix}`, async (req, res) => {
 )
 
 app.get(`/protected/${booksAPIPrefix}`, async (req, res) => {
-  console.log(req.headers.authorization);
-  
+  let bearerToken = req.headers.authorization.split('')[1]
+  console.log(bearerToken);
+  let payload = jwt.decode(bearerToken);
+  if ( moment().unix() > payload.exp) {
+    res.status(400).send({msg: 'expired'});
+  } else {
+    let queryTitle = req.query.title || "%";
+    queryTitle = queryTitle !== "%" ? "%" + queryTitle + "%" : "%";
+    console.log(`queryTitle ${queryTitle}`);
+    const result = await pool.query('SELECT id, title from books where title like $1',[queryTitle])
+    if (result.rows.length > 0) { 
+      result.rows.forEach( row => console.debug(row.id, row.title))
+      res.send([...result.rows, new Date()]);
+    } else {
+      res.send([...[], new Date()]);
+    }
+  }
+
 })
+
 
 app.get(`/${booksAPIPrefix}`, async (req, res) => {
   let queryTitle = req.query.title || "%";

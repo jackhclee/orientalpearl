@@ -48,7 +48,7 @@ app.get(`/${loginAPIPrefix}`, async (req, res) => {
 app.get(`/${callbackAPIPrefix}`, async (req, res) => {
   const tokenParams = {
     code: req.params.code,
-    redirect_uri: 'http://localhost:3000/callback',
+    redirect_uri: 'https://orientalpearl.herokuapp.com/callback',
     scope: scope,
   };
 

@@ -12,7 +12,8 @@ config = {
     secret: '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'
   },
   auth: {
-    tokenHost: 'https://accounts.google.com',
+    tokenHost: 'https://oauth2.googleapis.com',
+    tokenPath: '/token',
     authorizeHost: 'https://accounts.google.com',
     authorizePath: '/o/oauth2/v2/auth'
   }

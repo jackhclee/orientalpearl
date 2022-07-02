@@ -14,7 +14,7 @@ config = {
   auth: {
     tokenHost: 'https://accounts.google.com',
     authorizeHost: 'https://accounts.google.com',
-    authorizePath: '/o/oauth2/auth/v2/auth'
+    authorizePath: '/o/oauth2/v2/auth'
   }
 };
 

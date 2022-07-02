@@ -65,7 +65,7 @@ app.get(`/protected/${booksAPIPrefix}`, async (req, res) => {
   console.log(bearerToken);
   let payload = jwt.decode(bearerToken);
   console.log(payload)
-  let now = moment.unix();
+  let now = moment();
   let exp = moment.unix(payload.exp);
   console.log(`payload.expire at ${exp.utc()}`)
   if (now.isAfter(exp)) {

@@ -58,6 +58,11 @@ app.get(`/${callbackAPIPrefix}`, async (req, res) => {
 }
 )
 
+app.get(`/protected/${booksAPIPrefix}`, async (req, res) => {
+  console.log(req.headers.authorization);
+  
+})
+
 app.get(`/${booksAPIPrefix}`, async (req, res) => {
   let queryTitle = req.query.title || "%";
   queryTitle = queryTitle !== "%" ? "%" + queryTitle + "%" : "%";

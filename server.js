@@ -30,9 +30,11 @@ const callbackAPIPrefix = "callback"
 
 const scope = 'https://www.googleapis.com/auth/userinfo.email';
 
+const client = new AuthorizationCode(config);
+
+
 app.get(`/${loginAPIPrefix}`, async (req, res) => {
 
-    const client = new AuthorizationCode(config);
   
     const authorizationUri = client.authorizeURL({
       redirect_uri: 'https://orientalpearl.herokuapp.com/callback',

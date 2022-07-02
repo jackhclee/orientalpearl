@@ -19,7 +19,6 @@ config = {
   }
 };
 
-
 const booksAPIPrefix = "books";
 
 const customersAPIPrefix = "customers";
@@ -31,7 +30,6 @@ const callbackAPIPrefix = "callback"
 const scope = 'https://www.googleapis.com/auth/userinfo.email';
 
 const client = new AuthorizationCode(config);
-
 
 app.get(`/${loginAPIPrefix}`, async (req, res) => {
 
@@ -49,7 +47,7 @@ app.get(`/${loginAPIPrefix}`, async (req, res) => {
 
 app.get(`/${callbackAPIPrefix}`, async (req, res) => {
   const tokenParams = {
-    code: req.params.code,
+    code: req.query.code,
     redirect_uri: 'https://orientalpearl.herokuapp.com/callback',
     scope: scope,
   };

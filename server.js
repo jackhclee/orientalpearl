@@ -1,14 +1,61 @@
 const express = require('express');
 const { Pool } = require('pg');
 const cors = require('cors')
-
+const { ClientCredentials, AuthorizationCode } = require('simple-oauth2');
 const app = express();
 app.use(express.json());
 app.use(cors())
 
+config = {
+  client: {
+    id: '689319227554-6gnh086rs70u52km7g5sevthbg7934at.apps.googleusercontent.com',
+    secret: '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'
+  },
+  auth: {
+    tokenHost: 'https://accounts.google.com/o/oauth2/auth'
+  }
+};
+
+
 const booksAPIPrefix = "books";
 
 const customersAPIPrefix = "customers";
+
+const loginAPIPrefix = "login"
+
+const callbackAPIPrefix = "callback"
+
+const scope = 'https://www.googleapis.com/auth/userinfo.email';
+
+agg.get(`/${loginAPIPrefix}`, async (req, res) => {
+
+    const client = new AuthorizationCode(config);
+  
+    const authorizationUri = client.authorizeURL({
+      redirect_uri: 'http://orientalpearl.herokuapp.com/callback',
+      scope: scope,
+      state: '<state>'
+    });
+  
+    // Redirect example using Express (see http://expressjs.com/api.html#res.redirect)
+    res.redirect(authorizationUri);
+   
+})
+
+agg.get(`/${callbackAPIPrefix}`, async (req, res) => {
+  const tokenParams = {
+    code: req.params.code,
+    redirect_uri: 'http://localhost:3000/callback',
+    scope: scope,
+  };
+
+  try {
+    const accessToken = await client.getToken(tokenParams);
+  } catch (error) {
+    console.log('Access Token Error', error.message);
+  }
+}
+)
 
 app.get(`/${booksAPIPrefix}`, async (req, res) => {
   let queryTitle = req.query.title || "%";

@@ -67,7 +67,7 @@ app.get(`/protected/${booksAPIPrefix}`, async (req, res) => {
   console.log(payload)
   let now = moment.unix();
   let exp = moment.unix(payload.exp);
-  console.log(`payload.expire at ${ts.utc()}`)
+  console.log(`payload.expire at ${exp.utc()}`)
   if (now.isBefore(exp)) {
     console.log("token expired");
     res.status(400).send({msg: 'expired'});

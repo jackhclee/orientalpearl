@@ -27,7 +27,7 @@ const callbackAPIPrefix = "callback"
 
 const scope = 'https://www.googleapis.com/auth/userinfo.email';
 
-agg.get(`/${loginAPIPrefix}`, async (req, res) => {
+app.get(`/${loginAPIPrefix}`, async (req, res) => {
 
     const client = new AuthorizationCode(config);
   
@@ -42,7 +42,7 @@ agg.get(`/${loginAPIPrefix}`, async (req, res) => {
    
 })
 
-agg.get(`/${callbackAPIPrefix}`, async (req, res) => {
+app.get(`/${callbackAPIPrefix}`, async (req, res) => {
   const tokenParams = {
     code: req.params.code,
     redirect_uri: 'http://localhost:3000/callback',

@@ -32,8 +32,6 @@ const scope = 'https://www.googleapis.com/auth/userinfo.email';
 const client = new AuthorizationCode(config);
 
 app.get(`/${loginAPIPrefix}`, async (req, res) => {
-
-  
     const authorizationUri = client.authorizeURL({
       redirect_uri: 'https://orientalpearl.herokuapp.com/callback',
       scope: scope,
@@ -42,7 +40,6 @@ app.get(`/${loginAPIPrefix}`, async (req, res) => {
   
     // Redirect example using Express (see http://expressjs.com/api.html#res.redirect)
     res.redirect(authorizationUri);
-   
 })
 
 app.get(`/${callbackAPIPrefix}`, async (req, res) => {
@@ -54,6 +51,7 @@ app.get(`/${callbackAPIPrefix}`, async (req, res) => {
 
   try {
     const accessToken = await client.getToken(tokenParams);
+    res.send(accessToken);
   } catch (error) {
     console.log('Access Token Error', error.message);
   }

@@ -1,5 +1,6 @@
 const express = require('express');
 const axios = require('axios').default;
+const httpContext = require('express-http-context');
 const { Pool } = require('pg');
 const cors = require('cors')
 const { ClientCredentials, AuthorizationCode } = require('simple-oauth2');
@@ -17,7 +18,7 @@ app.use((req, res, next) => {
   req.ips.forEach((ip, idx) => console.log(`req.ips ${idx} ${ip}`));
   var geo = geoip.lookup(req.ip);
   console.log(geo);
-  req.params.country = geo.country;
+  httpContext.set('country', geo.country);
   next();
 })
 
@@ -106,7 +107,7 @@ app.get(`/${booksAPIPrefix}`, async (req, res) => {
   let exchangeRate = 1.0;
 
   let currency = 'GBP'
-  if (req.params.country === 'IE') {
+  if (httpContext.get('country') === 'IE') {
     currency = 'USD'
   }
   try {

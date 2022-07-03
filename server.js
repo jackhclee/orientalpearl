@@ -109,7 +109,7 @@ app.get(`/${booksAPIPrefix}`, async (req, res) => {
     currency = 'USD'
   }
   try {
-    let res = axios.get(`https://api.apilayer.com/fixer/latest?symbols=${currency}&base=GBP`, 
+    let res = await axios.get(`https://api.apilayer.com/fixer/latest?symbols=${currency}&base=GBP`, 
     { apikey: process.env.FIXER_API_KEY});
     exchangeRate = res.data.rates[0];
     console.log(`Currency ${currency} with exchangeRate ${exchangeRate}`);

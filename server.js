@@ -1,3 +1,4 @@
+const newrelic = require('newrelic');
 const express = require('express');
 const axios = require('axios').default;
 const httpContext = require('express-http-context');

@@ -16,6 +16,7 @@ app.use((req, res, next) => {
   req.ips.forEach((ip, idx) => console.log(`req.ips ${idx} ${ip}`));
   var geo = geoip.lookup(req.ip);
   console.log(geo);
+  req.params.country = geo.country;
   next();
 })
 
@@ -98,14 +99,31 @@ app.get(`/protected/${booksAPIPrefix}`, async (req, res) => {
 })
 
 
+
 app.get(`/${booksAPIPrefix}`, async (req, res) => {
+
+  let exchangeRate = 1.0;
+
+  let currency = 'GBP'
+  if (req.params.country === 'IE') {
+    currency = 'USD'
+  }
+  try {
+    let res = axios.get(`https://api.apilayer.com/fixer/latest?symbols=${currency}&base=GBP`, 
+    { apikey: process.env.FIXER_API_KEY});
+    exchangeRate = res.data.rates[0];
+    console.log(`Currency ${currency} with exchangeRate ${exchangeRate}`);
+  } catch (e) {
+  }
+
   let queryTitle = req.query.title || "%";
   queryTitle = queryTitle !== "%" ? "%" + queryTitle + "%" : "%";
   console.log(`queryTitle ${queryTitle}`);
-  const result = await pool.query('SELECT id, title from books where title like $1', [queryTitle])
+  const result = await pool.query('SELECT id, title, price from books where title like $1', [queryTitle])
   if (result.rows.length > 0) {
-    result.rows.forEach(row => console.debug(row.id, row.title))
-    res.send([...result.rows, new Date()]);
+    let booksWithLocalPrice = result.rows.map((book) => { return { id: book.id, title: book.title, price: book.price * exchangeRate}})
+    booksWithLocalPrice.forEach(row => console.debug(row.id, row.title))
+    res.send([...booksWithLocalPrice, new Date()]);
   } else {
     res.send([...[], new Date()]);
   }

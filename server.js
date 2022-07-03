@@ -109,7 +109,9 @@ app.get(`/${booksAPIPrefix}`, async (req, res) => {
 
   let currency = 'GBP'
   if (httpContext.get('country') === 'IE') {
-    currency = 'USD'
+    currency = 'EUR';
+  } else {
+    currency = 'USD';
   }
   try {
     let res = await axios.get(`https://api.apilayer.com/fixer/latest?symbols=${currency}&base=GBP`, 

@@ -172,7 +172,7 @@ app.post(`/${booksAPIPrefix}`, async (req, res) => {
 }
 )
 
-app.get("/", (req, res) => {
+app.all("/", (req, res) => {
   // ['GB','HK','IE','US']
   let requestCountry = httpContext.get('country');
   if (['GB','IE'].indexOf(requestCountry) >=0) {

@@ -173,9 +173,11 @@ app.post(`/${booksAPIPrefix}`, async (req, res) => {
 )
 
 app.all("/", (req, res) => {
-  // ['GB','HK','IE','US']
+  // We should serve at least below markets ['GB','HK','IE','US']
+
+  let markets = ['GB','HK','IE','US']
   let requestCountry = httpContext.get('country');
-  if (['GB','IE'].indexOf(requestCountry) >=0) {
+  if (markets.indexOf(requestCountry) >=0) {
     res.status(200).send({serviceStatus: `Serving availbale at ${requestCountry}`});
   } else {
     res.status(404).send({serviceStatus: `NO Serving availbale at ${requestCountry}`});

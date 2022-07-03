@@ -178,7 +178,7 @@ app.get("/", (req, res) => {
   if (['GB','IE'].indexOf(requestCountry) >=0) {
     res.status(200).send({serviceStatus: `Serving availbale at ${requestCountry}`});
   } else {
-    res.status(403).send({serviceStatus: `NO Serving availbale at ${requestCountry}`});
+    res.status(404).send({serviceStatus: `NO Serving availbale at ${requestCountry}`});
   }
 })
 

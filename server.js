@@ -21,6 +21,15 @@ app.use((req, res, next) => {
   var geo = geoip.lookup(req.ip);
   console.log(geo);
   httpContext.set('country', geo.country);
+  // We should serve at least below markets ['GB','HK','IE','US']
+  let markets = ['GB','IE']
+  //let markets = ['GB','HK','IE','US']
+  let requestCountry = httpContext.get('country');
+  if (markets.indexOf(requestCountry) >=0) {
+    next();
+  } else {
+    res.status(404).send({serviceStatus: `NO Service availbale at ${requestCountry}`});
+  }
   next();
 })
 
@@ -174,15 +183,7 @@ app.post(`/${booksAPIPrefix}`, async (req, res) => {
 )
 
 app.all("/", (req, res) => {
-  // We should serve at least below markets ['GB','HK','IE','US']
-  let markets = ['GB','IE']
-  //let markets = ['GB','HK','IE','US']
-  let requestCountry = httpContext.get('country');
-  if (markets.indexOf(requestCountry) >=0) {
-    res.status(200).send({serviceStatus: `Service availbale at ${requestCountry}`});
-  } else {
-    res.status(404).send({serviceStatus: `NO Service availbale at ${requestCountry}`});
-  }
+  res.send({contactUs: 'email to info@orientalpearlbooks.com'})
 })
 
 const pool = new Pool({

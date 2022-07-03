@@ -8,9 +8,11 @@ const app = express();
 app.use(express.json());
 app.use(cors())
 
+app.enable('trust proxy')
+
 app.use((req, res, next) => {
-  console.log(req.ip);
-  req.ips.forEach((ip) => console.log(ip));
+  console.log(`req.ip ${req.ip}`);
+  req.ips.forEach((ip, idx) => console.log(`req.ips ${idx} ${ip}`));
   next();
 })
 

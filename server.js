@@ -3,6 +3,7 @@ const { Pool } = require('pg');
 const cors = require('cors')
 const { ClientCredentials, AuthorizationCode } = require('simple-oauth2');
 const moment = require('moment');
+const geoip = require('geoip-country');
 const jwt = require('jsonwebtoken');
 const app = express();
 app.use(express.json());
@@ -13,6 +14,8 @@ app.enable('trust proxy')
 app.use((req, res, next) => {
   console.log(`req.ip ${req.ip}`);
   req.ips.forEach((ip, idx) => console.log(`req.ips ${idx} ${ip}`));
+  var geo = geoip.lookup(ip);
+  console.log(geo);
   next();
 })
 
@@ -42,14 +45,14 @@ const scope = 'https://www.googleapis.com/auth/userinfo.email';
 const client = new AuthorizationCode(config);
 
 app.get(`/${loginAPIPrefix}`, async (req, res) => {
-    const authorizationUri = client.authorizeURL({
-      redirect_uri: 'https://orientalpearl.herokuapp.com/callback',
-      scope: scope,
-      state: '<state>'
-    });
-  
-    // Redirect example using Express (see http://expressjs.com/api.html#res.redirect)
-    res.redirect(authorizationUri);
+  const authorizationUri = client.authorizeURL({
+    redirect_uri: 'https://orientalpearl.herokuapp.com/callback',
+    scope: scope,
+    state: '<state>'
+  });
+
+  // Redirect example using Express (see http://expressjs.com/api.html#res.redirect)
+  res.redirect(authorizationUri);
 })
 
 app.get(`/${callbackAPIPrefix}`, async (req, res) => {
@@ -78,14 +81,14 @@ app.get(`/protected/${booksAPIPrefix}`, async (req, res) => {
   console.log(`payload.expire at ${exp.utc()}`)
   if (now.isAfter(exp)) {
     console.log("token expired");
-    res.status(400).send({msg: 'expired'});
+    res.status(400).send({ msg: 'expired' });
   } else {
     let queryTitle = req.query.title || "%";
     queryTitle = queryTitle !== "%" ? "%" + queryTitle + "%" : "%";
     console.log(`queryTitle ${queryTitle}`);
-    const result = await pool.query('SELECT id, title from books where title like $1',[queryTitle])
-    if (result.rows.length > 0) { 
-      result.rows.forEach( row => console.debug(row.id, row.title))
+    const result = await pool.query('SELECT id, title from books where title like $1', [queryTitle])
+    if (result.rows.length > 0) {
+      result.rows.forEach(row => console.debug(row.id, row.title))
       res.send([...result.rows, new Date()]);
     } else {
       res.send([...[], new Date()]);
@@ -99,9 +102,9 @@ app.get(`/${booksAPIPrefix}`, async (req, res) => {
   let queryTitle = req.query.title || "%";
   queryTitle = queryTitle !== "%" ? "%" + queryTitle + "%" : "%";
   console.log(`queryTitle ${queryTitle}`);
-  const result = await pool.query('SELECT id, title from books where title like $1',[queryTitle])
-  if (result.rows.length > 0) { 
-    result.rows.forEach( row => console.debug(row.id, row.title))
+  const result = await pool.query('SELECT id, title from books where title like $1', [queryTitle])
+  if (result.rows.length > 0) {
+    result.rows.forEach(row => console.debug(row.id, row.title))
     res.send([...result.rows, new Date()]);
   } else {
     res.send([...[], new Date()]);
@@ -113,9 +116,9 @@ app.get(`/${customersAPIPrefix}`, async (req, res) => {
   let queryName = req.query.name || "%";
   queryName = queryName !== "%" ? "%" + queryName + "%" : "%";
   console.log(`queryName ${queryName}`);
-  const result = await pool.query('SELECT * FROM customers WHERE name LIKE $1',[queryName])
+  const result = await pool.query('SELECT * FROM customers WHERE name LIKE $1', [queryName])
   if (result.rows.length > 0) {
-    result.rows.forEach( row => console.debug(row.id, row.title))
+    result.rows.forEach(row => console.debug(row.id, row.title))
     res.send([...result.rows, new Date()]);
   } else {
     res.send([...[], new Date()]);
@@ -128,19 +131,19 @@ app.post(`/${booksAPIPrefix}`, async (req, res) => {
   console.log(`submitted ${newTitle}`)
 
   try {
-    const resultRead = await pool.query("SELECT * FROM books WHERE title like $1",[newTitle]);
+    const resultRead = await pool.query("SELECT * FROM books WHERE title like $1", [newTitle]);
     console.log(resultRead.rows)
     if (resultRead.rows > 0) {
       console.log(`repeated entry submitted ${newTitle}`)
       return res.status(400).send(
         //{err: 'Cannot insert data'}
         "repeated"
-        );
+      );
     }
-    const result = await pool.query("INSERT INTO books (title) values ($1) returning id",[newTitle]);
-    return res.status(200).send({id: result.rows[0].id})
+    const result = await pool.query("INSERT INTO books (title) values ($1) returning id", [newTitle]);
+    return res.status(200).send({ id: result.rows[0].id })
   } catch (err) {
-    return res.status(400).send({err: 'Cannot insert data'});
+    return res.status(400).send({ err: 'Cannot insert data' });
   }
 }
 )

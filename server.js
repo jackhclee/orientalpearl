@@ -14,7 +14,7 @@ app.enable('trust proxy')
 app.use((req, res, next) => {
   console.log(`req.ip ${req.ip}`);
   req.ips.forEach((ip, idx) => console.log(`req.ips ${idx} ${ip}`));
-  var geo = geoip.lookup(ip);
+  var geo = geoip.lookup(req.ip);
   console.log(geo);
   next();
 })

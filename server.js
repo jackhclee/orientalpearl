@@ -114,6 +114,7 @@ app.get(`/${booksAPIPrefix}`, async (req, res) => {
     exchangeRate = res.data.rates[0];
     console.log(`Currency ${currency} with exchangeRate ${exchangeRate}`);
   } catch (e) {
+    console.log(e);
   }
 
   let queryTitle = req.query.title || "%";

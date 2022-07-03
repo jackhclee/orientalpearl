@@ -8,6 +8,12 @@ const app = express();
 app.use(express.json());
 app.use(cors())
 
+app.use((req, res, next) => {
+  console.log(req.ip);
+  req.ips.forEach((ip) => console.log(ip));
+  next();
+})
+
 config = {
   client: {
     id: '689319227554-6gnh086rs70u52km7g5sevthbg7934at.apps.googleusercontent.com',

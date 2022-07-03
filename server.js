@@ -173,7 +173,13 @@ app.post(`/${booksAPIPrefix}`, async (req, res) => {
 )
 
 app.get("/", (req, res) => {
-  res.status(200).send({});
+  // ['GB','HK','IE','US']
+  let requestCountry = httpContext.get('country');
+  if (['GB','IE'].indexOf(requestCountry) >=0) {
+    res.status(200).send({serviceStatus: `Serving availbale at ${requestCountry}`});
+  } else {
+    res.status(403).send({serviceStatus: `NO Serving availbale at ${requestCountry}`});
+  }
 })
 
 const pool = new Pool({

@@ -123,7 +123,7 @@ app.get(`/${booksAPIPrefix}`, async (req, res) => {
 
   let currency = 'GBP'
   if (httpContext.get('country') === 'GB') {
-    currency = 'USD';
+    currency = 'GBP';
   } else if (httpContext.get('country') === 'IE') {
     currency = 'EUR';
   } else {

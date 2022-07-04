@@ -26,8 +26,8 @@ app.use((req, res, next) => {
   
   // We should serve at least below markets ['GB','HK','IE','US']
   
-  //let markets = ['GB','IE']
-  let markets = ['GB','HK','IE','US']
+  let markets = ['GB','IE']
+
   let requestCountry = httpContext.get('country');
   if (markets.indexOf(requestCountry) >=0) {
     next();
@@ -123,7 +123,7 @@ app.get(`/${booksAPIPrefix}`, async (req, res) => {
 
   let currency = 'GBP'
   if (httpContext.get('country') === 'GB') {
-    currency = 'GBP';
+    currency = 'USD';
   } else if (httpContext.get('country') === 'IE') {
     currency = 'EUR';
   } else {

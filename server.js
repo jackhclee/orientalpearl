@@ -24,9 +24,9 @@ app.use((req, res, next) => {
   
   // Task 1
   
-  // We should serve at least below markets ['GB','HK','IE','US']
+  //We should serve at least below markets ['GB','HK','IE','US']
   
-  let markets = ['GB','IE']
+  let markets = ['GB','HK','IE','US']
 
   let requestCountry = httpContext.get('country');
   if (markets.indexOf(requestCountry) >=0) {
@@ -133,6 +133,9 @@ app.get(`/${booksAPIPrefix}`, async (req, res) => {
     let res = await axios.get(`https://api.apilayer.com/exchangerates_data/convert?to=${currency}&from=GBP&amount=10`, 
     { headers: { apikey: process.env.FIXER_API_KEY}});
     exchangeRate = res.data.info.rate;
+    // or use this free API
+    // let res = await axios.get(`https://api.exchangerate.host/latest?base=GBP&symbols=${currency}`);
+    // exchangeRate = Object.values(res.data.rate)[0];
     console.log(`Currency ${currency} with exchangeRate ${exchangeRate}`);
   } catch (e) {
     console.log(e);

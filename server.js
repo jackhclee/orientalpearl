@@ -686,8 +686,10 @@ app.get(`/${fileAPIPrefix}`, async (req, res) => {
   c3RhcnR4cmVmCjI2NzgzCiUlRU9GCg==`;
 
   res.status(200)
-  .setHeader('content-disposition','inline; filename="t1.pdf"')
-  .setHeader('content-type','application/pdf')
+  .set({
+    'content-disposition' : "inline; filename=\"t1.pdf\"",
+    'content-size' : 27382,
+    'content-type' : "application/pdf"})
   .send(Base64.atob(pdfBase64Txt))
   
 })

@@ -10,10 +10,10 @@ const moment = require('moment');
 const geoip = require('geoip-country');
 const jwt = require('jsonwebtoken');
 const app = express();
-app.use(express.json());
+app.use(express.json({limit: "4096kb"}));
 app.use(cors())
 app.use(httpContext.middleware);
-app.use(express.limit('4M'));
+
 
 app.enable('trust proxy')
 

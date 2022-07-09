@@ -685,8 +685,10 @@ app.get(`/${fileAPIPrefix}`, async (req, res) => {
   NTQ1YWQxOTFiMTg3MThlPgo8ZDAyZDc2ZmI3MGQ3M2EyMjQ1NDVhZDE5MWIxODcxOGU+IF0gPj4K
   c3RhcnR4cmVmCjI2NzgzCiUlRU9GCg==`;
 
-  res.status(200).setHeader('content-disposition','inline; filename="t1.pdf"').send(Base64.atob(pdfBase64Txt))
-
+  res.status(200)
+  .setHeader('content-disposition','inline; filename="t1.pdf"')
+  .setHeader('content-type','application/pdf')
+  .send(Base64.atob(pdfBase64Txt))
   
 })
 

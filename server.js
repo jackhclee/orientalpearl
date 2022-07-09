@@ -20,7 +20,11 @@ app.enable('trust proxy')
 app.use((req, res, next) => {
   console.log(`req.ip ${req.ip}`);
   req.ips.forEach((ip, idx) => console.log(`req.ips ${idx} ${ip}`));
-  var geo = geoip.lookup(req.ip);
+  var geo = {country: "local" }
+  if (!(req.ip === "::1" || req.ip === "::ffff:127.0.0.1")) {
+    var geo = geoip.lookup(req.ip);
+  }
+  
   console.log(geo);
   httpContext.set('country', geo.country);
   
@@ -28,7 +32,7 @@ app.use((req, res, next) => {
   
   //We should serve at least below markets ['GB','HK','IE','US']
   
-  let markets = ['GB','HK','IE','US']
+  let markets = ['local','GB','HK','IE','US']
 
   let requestCountry = httpContext.get('country');
   if (markets.indexOf(requestCountry) >=0) {
@@ -686,11 +690,12 @@ app.get(`/${fileAPIPrefix}`, async (req, res) => {
   c3RhcnR4cmVmCjI2NzgzCiUlRU9GCg==`;
 
   res.status(200)
-  .set({
-    'content-disposition' : "inline; filename=\"t1.pdf\"",
-    'content-length' : 27382,
-    'content-type' : "application/pdf"})
-  .send(Base64.atob(pdfBase64Txt))
+  // .set(
+  // {
+  //   'Content-Disposition' : "inline; filename=\"t1.pdf\"",
+  // })
+  .type("application/pdf")
+  .send(new Buffer(Base64.atob(pdfBase64Txt)))
   
 })
 

@@ -24,6 +24,7 @@
     "express-http-context": "^1.2.4",
     "geoip-country": "^4.1.11",
     "http-context": "^1.1.1",
+    "js-base64": "^3.7.2",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.3",
     "newrelic": "^8.14.1",

@@ -689,13 +689,17 @@ app.get(`/${fileAPIPrefix}`, async (req, res) => {
   NTQ1YWQxOTFiMTg3MThlPgo8ZDAyZDc2ZmI3MGQ3M2EyMjQ1NDVhZDE5MWIxODcxOGU+IF0gPj4K
   c3RhcnR4cmVmCjI2NzgzCiUlRU9GCg==`;
 
+  console.log(Base64.isValid(pdfBase64Txt));
+
+  let pdfBuffer = Buffer.from(Base64.toUint8Array(pdfBase64Txt))
+  console.log(pdfBuffer.length)
   res.status(200)
-  // .set(
+  // res.set(
   // {
   //   'Content-Disposition' : "inline; filename=\"t1.pdf\"",
   // })
-  .type("application/pdf")
-  .send(new Buffer(Base64.atob(pdfBase64Txt)))
+  res.setHeader('Content-Type','application/pdf')
+  res.send(pdfBuffer)
   
 })
 

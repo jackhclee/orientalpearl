@@ -204,15 +204,9 @@ app.all("/", (req, res) => {
 })
 
 
-app.get(`/${fileAPIPrefix}`, async (req, res) => {
-  let id = 1
+app.get(`/${fileAPIPrefix}/:id`, async (req, res) => {
+  let id = req.params.id
   const result = await pool.query('SELECT name, mime, content from files where id = $1', [id])
-
-
-
-
-  
-
   // console.log(Base64.isValid(pdfBase64Txt));
   // let pdfBuffer = Buffer.from(Base64.toUint8Array(pdfBase64Txt))
   let pdfBuffer = result.rows[0].content

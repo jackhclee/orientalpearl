@@ -10,7 +10,7 @@ const moment = require('moment');
 const geoip = require('geoip-country');
 const jwt = require('jsonwebtoken');
 const app = express();
-app.use(express.json({limit: "8MB"}));
+app.use(express.json({ limit: "8MB" }));
 app.use(cors())
 app.use(httpContext.middleware);
 
@@ -20,25 +20,25 @@ app.enable('trust proxy')
 app.use((req, res, next) => {
   console.log(`req.ip ${req.ip}`);
   req.ips.forEach((ip, idx) => console.log(`req.ips ${idx} ${ip}`));
-  var geo = {country: "local" }
+  var geo = { country: "local" }
   if (!(req.ip === "::1" || req.ip === "::ffff:127.0.0.1")) {
     var geo = geoip.lookup(req.ip);
   }
-  
+
   console.log(geo);
   httpContext.set('country', geo.country);
-  
+
   // Task 1
-  
+
   //We should serve at least below markets ['GB','HK','IE','US']
-  
-  let markets = ['local','GB','HK','IE','US']
+
+  let markets = ['local', 'GB', 'HK', 'IE', 'US']
 
   let requestCountry = httpContext.get('country');
-  if (markets.indexOf(requestCountry) >=0) {
+  if (markets.indexOf(requestCountry) >= 0) {
     next();
   } else {
-    res.status(404).send({serviceStatus: `NO Service availbale at ${requestCountry}`});
+    res.status(404).send({ serviceStatus: `NO Service availbale at ${requestCountry}` });
   }
 })
 
@@ -138,8 +138,8 @@ app.get(`/${booksAPIPrefix}`, async (req, res) => {
     currency = 'USD';
   }
   try {
-    let res = await axios.get(`https://api.apilayer.com/exchangerates_data/convert?to=${currency}&from=GBP&amount=10`, 
-    { headers: { apikey: process.env.FIXER_API_KEY}});
+    let res = await axios.get(`https://api.apilayer.com/exchangerates_data/convert?to=${currency}&from=GBP&amount=10`,
+      { headers: { apikey: process.env.FIXER_API_KEY } });
     exchangeRate = res.data.info.rate;
     // or use this free API
     // let res = await axios.get(`https://api.exchangerate.host/latest?base=GBP&symbols=${currency}`);
@@ -154,7 +154,7 @@ app.get(`/${booksAPIPrefix}`, async (req, res) => {
   console.log(`queryTitle ${queryTitle}`);
   const result = await pool.query('SELECT id, title, price from books where title like $1', [queryTitle])
   if (result.rows.length > 0) {
-    let booksWithLocalPrice = result.rows.map((book) => { return { id: book.id, title: book.title, price: book.price * exchangeRate}})
+    let booksWithLocalPrice = result.rows.map((book) => { return { id: book.id, title: book.title, price: book.price * exchangeRate } })
     booksWithLocalPrice.forEach(row => console.debug(row.id, row.title))
     res.send([...booksWithLocalPrice, new Date()]);
   } else {
@@ -200,7 +200,7 @@ app.post(`/${booksAPIPrefix}`, async (req, res) => {
 )
 
 app.all("/", (req, res) => {
-  res.send({contactUs: 'email to info@orientalpearlbooks.com'})
+  res.send({ contactUs: 'email to info@orientalpearlbooks.com' })
 })
 
 app.get(`/${fileAPIPrefix}/:id`, async (req, res) => {
@@ -208,22 +208,28 @@ app.get(`/${fileAPIPrefix}/:id`, async (req, res) => {
   const result = await pool.query('SELECT name, mime, content from files where id = $1', [id])
   // console.log(Base64.isValid(pdfBase64Txt));
   // let pdfBuffer = Buffer.from(Base64.toUint8Array(pdfBase64Txt))
-  let pdfBuffer = result.rows[0].content
-  console.log(pdfBuffer.length)
-  res.status(200)
-  res.setHeader('Content-Type','application/pdf')
-  res.send(pdfBuffer)
+  if (result.rows.length > 0) {
+    let pdfBuffer = result.rows[0].content
+    console.log(pdfBuffer.length)
+    res.status(200)
+    res.setHeader('Content-Type', result.rows[0].mime)
+    res.send(pdfBuffer)
+  } else {
+    console.log("file not found");
+    res.status(404)
+    res.send({error: "file not found"})
+  }
 })
 
 app.post(`/${fileAPIPrefix}`, async (req, res) => {
   let fileName = req.body.name;
-
+  let mime = req.body.mime;
   let pdfBase64Txt = req.body.content;
 
   try {
-    let result = await pool.query("INSERT INTO files (name, content) values ($1 , $2) returning id"
-    ,[fileName, Buffer.from(Base64.toUint8Array(pdfBase64Txt))]);
-    res.status(200).send({id: result.rows[0].id})
+    let result = await pool.query("INSERT INTO files (name, mime, content) values ($1, $2, $3) returning id"
+      , [fileName, mime, Buffer.from(Base64.toUint8Array(pdfBase64Txt))]);
+    res.status(200).send({ id: result.rows[0].id })
   } catch (e) {
     console.log(e);
   }

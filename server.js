@@ -131,19 +131,19 @@ app.get(`/${booksAPIPrefix}`, async (req, res) => {
 
   let currency = 'GBP'
   if (httpContext.get('country') === 'GB') {
-    currency = 'GBP';
+    currency = 'USD';
   } else if (httpContext.get('country') === 'IE') {
     currency = 'EUR';
   } else {
     currency = 'USD';
   }
   try {
-    let res = await axios.get(`https://api.apilayer.com/exchangerates_data/convert?to=${currency}&from=GBP&amount=10`,
-      { headers: { apikey: process.env.FIXER_API_KEY } });
-    exchangeRate = res.data.info.rate;
-    // or use this free API
-    // let res = await axios.get(`https://api.exchangerate.host/latest?base=GBP&symbols=${currency}`);
-    // exchangeRate = Object.values(res.data.rate)[0];
+    // let res = await axios.get(`https://api.apilayer.com/exchangerates_data/convert?to=${currency}&from=GBP&amount=10`,
+    //   { headers: { apikey: process.env.FIXER_API_KEY } });
+    // exchangeRate = res.data.info.rate;
+    // // or use this free API
+    let res = await axios.get(`https://api.exchangerate.host/latest?base=GBP&symbols=${currency}`);
+    exchangeRate = Object.values(res.data.rate)[0];
     console.log(`Currency ${currency} with exchangeRate ${exchangeRate}`);
   } catch (e) {
     console.log(e);

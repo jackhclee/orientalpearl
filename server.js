@@ -143,7 +143,8 @@ app.get(`/${booksAPIPrefix}`, async (req, res) => {
     // exchangeRate = res.data.info.rate;
     // // or use this free API
     let res = await axios.get(`https://api.exchangerate.host/latest?base=GBP&symbols=${currency}`);
-    exchangeRate = Object.values(res.data.rate)[0];
+    //exchangeRate = Object.values(res.data.rate)[0];
+    exchangeRate = res.data.rates[currency];
     console.log(`Currency ${currency} with exchangeRate ${exchangeRate}`);
   } catch (e) {
     console.log(e);

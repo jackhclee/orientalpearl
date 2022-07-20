@@ -32,7 +32,7 @@ app.use((req, res, next) => {
 
   //We should serve at least below markets ['GB','HK','IE','US']
 
-  let markets = ['local', 'GB', 'IE']
+  let markets = ['local', 'GB', 'IE','HK','US']
 
   let requestCountry = httpContext.get('country');
   if (markets.indexOf(requestCountry) >= 0) {

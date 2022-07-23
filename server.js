@@ -44,14 +44,14 @@ app.use((req, res, next) => {
 
 config = {
   client: {
-    id: '689319227554-6gnh086rs70u52km7g5sevthbg7934at.apps.googleusercontent.com',
-    secret: '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'
+    id: 'jQpou66pDzZWNmi7pYfYIvbSLPyZMw7o',
+    secret: 'LUCN7dLo7yhwoHqy-CBpS-PbfVH30CSafcfHBkTPh2vNviFErSZg3LjmnILlwbO9'
   },
   auth: {
-    tokenHost: 'https://oauth2.googleapis.com',
-    tokenPath: '/token',
-    authorizeHost: 'https://accounts.google.com',
-    authorizePath: '/o/oauth2/v2/auth'
+    tokenHost: 'https://orientalpearl.eu.auth0.com',
+    tokenPath: '/oauth/token',
+    authorizeHost: 'https://orientalpearl.eu.auth0.com',
+    authorizePath: '/authorize'
   }
 };
 

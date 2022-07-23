@@ -65,7 +65,7 @@ const loginAPIPrefix = "login";
 
 const callbackAPIPrefix = "callback";
 
-const scope = 'https://www.googleapis.com/auth/userinfo.email';
+const scope = "openid"//'https://www.googleapis.com/auth/userinfo.email';
 
 const client = new AuthorizationCode(config);
 

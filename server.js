@@ -71,7 +71,7 @@ const client = new AuthorizationCode(config);
 
 app.get(`/${loginAPIPrefix}`, async (req, res) => {
   const authorizationUri = client.authorizeURL({
-    redirect_uri: 'https://orientalpearl.herokuapp.com/callback',
+    redirectUri: 'https://orientalpearl.herokuapp.com/callback',
     scope: scope,
     state: '<state>'
   });

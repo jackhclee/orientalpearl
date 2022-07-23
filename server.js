@@ -97,7 +97,13 @@ app.get(`/${callbackAPIPrefix}`, async (req, res) => {
 )
 
 app.get(`/protected/${booksAPIPrefix}`, async (req, res) => {
-  let bearerToken = req.headers.authorization.split(' ')[1]
+  let bearerToken = null;
+  try {
+    req.headers.authorization.split(' ')[1]
+  } catch (e) {
+    console.log(e)
+    res.status(400).send({ msg: 'error' });
+  }
   console.log(bearerToken);
   let payload = jwt.decode(bearerToken);
   console.log(payload)

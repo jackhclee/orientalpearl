@@ -105,7 +105,7 @@ app.get(`/protected/${booksAPIPrefix}`, async (req, res) => {
     res.status(400).send({ msg: 'error' });
   }
   console.log(bearerToken);
-  let payload = jwt.decode(bearerToken);
+  let payload = jwt.decode(bearerToken,{algorithm: 'RS256'});
   console.log(payload)
   let now = moment();
   let exp = moment.unix(payload.exp);

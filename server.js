@@ -99,7 +99,7 @@ app.get(`/${callbackAPIPrefix}`, async (req, res) => {
 app.get(`/protected/${booksAPIPrefix}`, async (req, res) => {
   let bearerToken = null;
   try {
-    req.headers.authorization.split(' ')[1]
+    bearerToken = req.headers.authorization.split(' ')[1]
   } catch (e) {
     console.log(e)
     res.status(400).send({ msg: 'error' });

@@ -63,7 +63,11 @@ const fileAPIPrefix = "files";
 
 const loginAPIPrefix = "login";
 
+const logoutAPIPrefix = "logout";
+
 const callbackAPIPrefix = "callback";
+
+const oauthDomainAPIPrefix = 'https://orientalpearl.eu.auth0.com/api/v2/'
 
 const scope = "openid profile email"//'https://www.googleapis.com/auth/userinfo.email';
 
@@ -78,6 +82,10 @@ app.get(`/${loginAPIPrefix}`, async (req, res) => {
 
   // Redirect example using Express (see http://expressjs.com/api.html#res.redirect)
   res.redirect(authorizationUri);
+})
+
+app.get(`${logoutAPIPrefix}`, async (req, res) => {
+  res.redirect(oauthDomainAPIPrefix + `logout?client_id=${config.client_id}` + `&returnTo=https://apple.com`);
 })
 
 app.get(`/${callbackAPIPrefix}`, async (req, res) => {

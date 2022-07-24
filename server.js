@@ -84,7 +84,7 @@ app.get(`/${loginAPIPrefix}`, async (req, res) => {
   res.redirect(authorizationUri);
 })
 
-app.get(`${logoutAPIPrefix}`, async (req, res) => {
+app.get(`/${logoutAPIPrefix}`, async (req, res) => {
   res.redirect(oauthDomainAPIPrefix + `logout?client_id=${config.client_id}` + `&returnTo=https://apple.com`);
 })
 

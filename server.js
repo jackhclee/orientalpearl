@@ -85,7 +85,7 @@ app.get(`/${loginAPIPrefix}`, async (req, res) => {
 })
 
 app.get(`/${logoutAPIPrefix}`, async (req, res) => {
-  res.redirect(oauthDomainAPIPrefix + `logout?client_id=${config.client_id}` + `&returnTo=https://apple.com`);
+  res.redirect(oauthDomainAPIPrefix + `logout?client_id=${config.client.id}` + `&returnTo=https://apple.com`);
 })
 
 app.get(`/${callbackAPIPrefix}`, async (req, res) => {

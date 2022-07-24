@@ -67,7 +67,7 @@ const logoutAPIPrefix = "logout";
 
 const callbackAPIPrefix = "callback";
 
-const oauthDomainAPIPrefix = 'https://orientalpearl.eu.auth0.com/api/v2/'
+const oauthDomainAPIPrefix = 'https://orientalpearl.eu.auth0.com/v2/'
 
 const scope = "openid profile email"//'https://www.googleapis.com/auth/userinfo.email';
 
